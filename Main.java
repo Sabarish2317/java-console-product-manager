@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,7 +20,8 @@ public class Main {
             System.out.println("3. update product");
             System.out.println("4. search product");
             System.out.println("5. list products");
-            System.out.println("6. exit");
+            System.out.println("6. Search with filter");
+            System.out.println("7. exit");
             
             int choice = scanner.nextInt();
             
@@ -60,8 +64,34 @@ public class Main {
                     break;  
                 
                 case 6:
-                    System.out.println("Exiting...");
-                    return; 
+                    System.out.println("Apply price filters");
+                    System.out.println("1.Price Low to high");
+                    System.out.println("2.High to low");
+                    System.out.println("3. Select range & sort");
+                    int case_no = scanner.nextInt();
+                    switch (case_no) {
+                        case 1:
+                            LowToHigh(listOfProducts);
+                            
+                            break;
+                        case 2:
+                            HighToLow(listOfProducts);
+                            break;
+                        case 3:
+                            System.out.println("provide Start price");
+                            int startPrice = scanner.nextInt();
+                            System.out.println("provide End price");
+                            int endPrice =  scanner.nextInt();
+                            System.out.println("Select order 1.ascending 2.descending");
+                            int order =  scanner.nextInt();
+                            SelectRange(startPrice,endPrice,order);        
+                        default:
+                            break;
+                    }
+                    break;
+
+                case 7:
+
                 
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -69,6 +99,46 @@ public class Main {
         }
     }
     
+     //sort in ascending order
+     public static void LowToHigh(List<Product> products){
+        products.sort(Comparator.comparingInt((Product tmpProduct) -> tmpProduct.getProductPrice()));
+        for(Product product : products){
+            System.out.println("product unique id: " + product.getProductId());
+            System.out.println("product name: " + product.getProductName());
+            System.out.println("product price: " + product.getProductPrice());
+            System.out.println("product description: " + product.getProductDescription());
+            System.out.println("product quantity: " + product.getProductQuantity());
+			System.out.println("printed--");
+        }
+     }
+
+     //sort in descending order
+     public static void HighToLow(List<Product> products){
+        products.sort(Comparator.comparingInt((Product tmpProduct) -> tmpProduct.getProductPrice()).reversed());
+        for(Product product : products){
+            System.out.println("product unique id: " + product.getProductId());
+            System.out.println("product name: " + product.getProductName());
+            System.out.println("product price: " + product.getProductPrice());
+            System.out.println("product description: " + product.getProductDescription());
+            System.out.println("product quantity: " + product.getProductQuantity());
+			System.out.println("printed--");
+        }
+     }
+    ///select based on range
+    public static void SelectRange(int start, int end,int order){
+        //if order is ascending
+        List<Product> tmpList = new ArrayList<>();   
+        for(Product tmpObj : listOfProducts){
+            if(tmpObj.getProductPrice() >= start && tmpObj.getProductPrice() <=end){
+                tmpList.add(tmpObj);
+            }
+        }
+        if(order == 1){
+            LowToHigh(tmpList);
+        }else{
+            HighToLow(tmpList);
+        }
+    }
 
 	///print all elements in the list
     private static void printList() {
@@ -129,4 +199,6 @@ public class Main {
 			}
 		}
 	}
+
+
 }
